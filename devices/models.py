@@ -42,7 +42,7 @@ class Device(models.Model):
         return reverse('detail', kwargs={'slug': self.slug})
 
     def __str__(self):
-        return self.name
+        return "_".join(self.name.split())
 
 
 class DeviceImage(models.Model):

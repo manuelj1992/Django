@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'devices.apps.DevicesConfig',
-    'comments.apps.CommentsConfig',
     'tours.apps.ToursConfig',
 ]
 
