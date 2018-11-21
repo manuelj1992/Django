@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 # Create your models here.
+
+
 class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
@@ -11,7 +13,7 @@ class Comment(models.Model):
         related_name='comments'
     )
     product = models.ForeignKey(
-        'devices.Product',
+        'devices.Device',
         related_name='comments',
         on_delete=models.CASCADE
     )

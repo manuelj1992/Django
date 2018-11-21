@@ -2,55 +2,51 @@ from django.db import models
 from django.urls import reverse
 
 
+class AppVersion(models.Model):
+    version = models.CharField(max_length=255)
+    platform = models.ForeignKey('devices.DevicesPlatform', on_delete=models.CASCADE, related_name='appversions')
+
+    def __str__(self):
+        return self.version + " for " + self.platform.__str__()
+
+
+class ClientApp(models.Model):
+    client = models.CharField(max_length=255)
+    app_version = models.ManyToManyField('devices.AppVersion')
+
+    def __str__(self):
+        return self.client
+
+
 class Device(models.Model):
+    ACTIVE = 1
+    INACTIVE = 0
+
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    title = models.CharField(max_length=255)
-    device_name = models.CharField(max_length=255)
-    decription = models.CharField(max_length=255)
-    u
-    price = models.IntegerField()
+
+    name = models.CharField(max_length=255, blank=True, null=True)
+    udid = models.CharField(max_length=255, blank=True, null=True)
+
     slug = models.SlugField()
-    categories = models.ManyToManyField('devices.ProduCategory')
 
-    dc = {
-          "appPackage": "com.android.vending",
-          "udid": "57U7N17B22013093",
-          "platformName": "android",
+    platform = models.ForeignKey('devices.DevicesPlatform', on_delete=models.CASCADE, related_name='devices', blank=True, null=True)
+    static_ip = models.CharField(max_length=25, blank=True, null=True)
+    so_version = models.CharField(max_length=25, blank=True, null=True)
 
-          "appActivity": 'com.google.android.finsky.activities.MainActivity',
-        }
-    """
-        Data about mobile, necessary to add in the reporting page.
-    """
-    client = 'CaixaBank'
-    mobile_data = {
-        'testname': 'HBAQX04_Broker_AndroidP8_r1',
-        'cliente': '%s' % client,
-        'mobile_model': 'HUAWEI P8 lite',
-        'so_version': 'Android 7.0',
-        'app_version': '5.7.1',
-        'so': 'Android',
-        'ip': '10.42.0.155',
+    device_model = models.CharField(max_length=255, blank=True, null=True)
 
-    }
-    TOUR = ['Abrir aplicación Caixabank',
-            'Login con usuario de broker (53400952)',
-            'Click en Inversiones',
-            'Click en Valores',
-            'Click en órdenes',
-            'Validar y desconectar']
-
+    client_app = models.ForeignKey('devices.ClientApp', on_delete=models.CASCADE, related_name='devices', blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'slug': self.slug})
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
-class ProductImage(models.Model):
-    product = models.ForeignKey(
+class DeviceImage(models.Model):
+    device = models.ForeignKey(
         'devices.Device', on_delete=models.CASCADE,
         related_name='images'
     )
@@ -60,11 +56,31 @@ class ProductImage(models.Model):
         return self.image.url
 
 
+class AppPackage(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    name = models.CharField(max_length=255)
+
+    automation_name = models.CharField(max_length=255, blank=True, null=True)
+    xcode_org_id = models.CharField(max_length=255, blank=True, null=True)
+    xcode_signing_id = models.CharField(max_length=255, blank=True, null=True)
+
+    app_package = models.CharField(max_length=255, blank=True, null=True)
+    app_activity = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
 class DevicesPlatform(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    platform_name = models.CharField(max_length=255)
-    appium_port = models.IntegerField(max_length=4)
+
+    name = models.CharField(max_length=255, blank=True, null=True)
+    appium_port = models.IntegerField(blank=True, null=True)
+
+    app_packages = models.ManyToManyField('devices.AppPackage')
     slug = models.SlugField()
 
     def __str__(self):

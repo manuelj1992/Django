@@ -1,8 +1,8 @@
 from django.urls import path
-from devices.views import HomeView, ProductDetailView, ProductBuyView
+from devices.views import HomeView, DeviceDetailView, DeviceBuyView
 
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
-    path("devices/<slug:slug>", ProductDetailView.as_view(), name="detail"),
-    path("devices/<slug:slug>/buy", ProductBuyView.as_view(), name="buy")
+    path("devices/<slug:slug>",    DeviceDetailView.as_view(), name="detail"),
+    path("devices/<slug:slug>/buy", DeviceBuyView.as_view(), name="buy")
 ]

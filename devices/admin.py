@@ -1,20 +1,36 @@
 from django.contrib import admin
-from devices.models import Product, ProductImage, \
-    ProduCategory
+from devices.models import Device, DeviceImage, \
+    DevicesPlatform, AppPackage, ClientApp, AppVersion
 
 
-class ProductImageInLine(admin.TabularInline):
-    model = ProductImage
+class DeviceImageInLine(admin.TabularInline):
+    model = DeviceImage
 
-class ProductAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"slug":("title",)}
+
+class DeviceAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}
     inlines = [
-        ProductImageInLine
+        DeviceImageInLine
     ]
 
-class ProduCategoryAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"slug":("name",)}
+
+class DevicesPlatformAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}
 
 
-admin.site.register(Product, ProductAdmin)
-admin.site.register(ProduCategory, ProduCategoryAdmin)
+class AppPackageAdmin(admin.ModelAdmin):
+    model = AppPackage
+
+
+class ClientAppAdmin(admin.ModelAdmin):
+    model = ClientApp
+
+class AppVersionAdmin(admin.ModelAdmin):
+    model = AppVersion
+
+
+admin.site.register(Device, DeviceAdmin)
+admin.site.register(DevicesPlatform, DevicesPlatformAdmin)
+admin.site.register(ClientApp, ClientAppAdmin)
+admin.site.register(AppPackage, AppPackageAdmin)
+admin.site.register(AppVersion, AppVersionAdmin)
