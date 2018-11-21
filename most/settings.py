@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'devices.apps.DevicesConfig',
     'comments.apps.CommentsConfig',
+    'tours.apps.ToursConfig',
 ]
 
 MIDDLEWARE = [
